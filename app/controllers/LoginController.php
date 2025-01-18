@@ -15,8 +15,10 @@ class LoginController {
     public function getStart() {
         $generaliserModel=Flight::generaliserModel();
         $form= $generaliserModel->generateInsertForm("agence_user",["id_user","name", "first_name","role"], "checkLogin");
+        $form2= $generaliserModel->generateInsertForm("agence_user",["id_user","role"], "signUp", "POST",["role"=>"User"]);
         $data = [
-            "form"=> $form
+            "login"=> $form,
+            "signUp" => $form2
         ];
         Flight::render('login', $data);
     }
@@ -29,26 +31,26 @@ class LoginController {
         }
         else{
             $_SESSION["id_user"]=$data["data"]["id_user"];
-            Flight::redirect('accueil');
+            Flight::redirect('home');
         }
     }
 
-    // public function signUp(){
-    //     $generaliserModel=Flight::generaliserModel();
-    //     $insert= $generaliserModel-> insertData("noel_user", ["id_user"], "POST");
-    //     if($insert["success"]==false){
-    //         Flight::redirect('/');
-    //     }
-    //     else{
-    //         $data=  $generaliserModel -> getLastInsertedId("noel_user","id_user");
-    //         $_SESSION["id_user"]=$data["last_id"];
-    //         Flight::redirect('accueil');
-    //     }
-    // }
+    public function signUp(){
+        $generaliserModel=Flight::generaliserModel();
+        $insert= $generaliserModel-> insertData("agence_user",["id_user"],'POST');
+        if($insert["success"]==false){
+            Flight::redirect('/');
+        }
+        else{
+            $data=  $generaliserModel -> getLastInsertedId("agence_user","id_user");
+            $_SESSION["id_user"]=$data["last_id"];
+            Flight::redirect('home');
+        }
+    }
 
-    public function getAccueil(){
+    public function getHome(){
         $data=[];
-        Flight:: render("accueil", $data);
+        Flight:: render("home", $data);
     }
 
 }

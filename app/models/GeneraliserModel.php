@@ -58,8 +58,12 @@ class GeneraliserModel
         return $html;
     }
 
-    public function generateInputFields($table, $omitColumns = [])
+    public function generateInputFields($table, $omitColumns = [], $hidden = [])
     {
+        foreach ($hidden as $hiddenName => $hiddenValue) {
+            echo "<input type=\"hidden\" name=\"{$hiddenName}\" value=\"{$hiddenValue}\">";
+        }
+
         $query = "DESCRIBE $table";
         $stmt = $this->bdd->prepare($query);
         $stmt->execute();
@@ -81,13 +85,19 @@ class GeneraliserModel
             $columnName = $column['Field'];
             $columnType = strtolower($column['Type']);
             $inputType = 'text';
+
             if (in_array($columnName, $omitColumns)) {
                 continue;
             }
-            foreach ($columnTypes as $dbType => $inputTypeValue) {
-                if (strpos($columnType, $dbType) !== false) {
-                    $inputType = $inputTypeValue;
-                    break;
+
+            if ($columnName === 'password') {
+                $inputType = 'password';
+            } else {
+                foreach ($columnTypes as $dbType => $inputTypeValue) {
+                    if (strpos($columnType, $dbType) !== false) {
+                        $inputType = $inputTypeValue;
+                        break;
+                    }
                 }
             }
             echo "<div class=\"form-group\">";
@@ -101,14 +111,14 @@ class GeneraliserModel
         }
     }
 
-
-    public function generateInsertForm($table, $omitColumns = [], $redirectPage = '#', $method = 'POST')
+    public function generateInsertForm($table, $omitColumns = [], $redirectPage = '#', $method = 'POST', $hidden = [])
     {
         echo "<form action=\"$redirectPage\" method=\"$method\">";
-        $this->generateInputFields($table, $omitColumns); 
+        $this->generateInputFields($table, $omitColumns, $hidden); 
         echo "<button type=\"submit\" class=\"btn btn-primary\">Submit</button>";
         echo "</form>";
     }
+
 
 
     public function getFormData($table, $omitColumns = [], $method = 'POST')
