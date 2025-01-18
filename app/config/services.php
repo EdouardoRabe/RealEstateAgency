@@ -1,9 +1,7 @@
 <?php
 
-use app\models\AdminModel;
-use app\models\BusModel;
-use app\models\CadeauxModel;
 use app\models\GeneraliserModel;
+use app\models\HabitationModel;
 use flight\Engine;
 use flight\database\PdoWrapper;
 use flight\debug\database\PdoQueryCapture;
@@ -38,9 +36,9 @@ Flight::map('generaliserModel', function () {
     return new GeneraliserModel(Flight::bdd());
 });
 
-// Flight::map('cadeauxModel', function () {
-//     return new CadeauxModel(Flight::bdd());
-// });
+Flight::map('habitationModel', function () {
+    return new HabitationModel(Flight::bdd());
+});
 
 
 // Flight::map('adminModel', function () {

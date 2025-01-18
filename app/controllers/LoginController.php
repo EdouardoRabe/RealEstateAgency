@@ -48,9 +48,4 @@ class LoginController {
         }
     }
 
-    public function getHome(){
-        $data=[];
-        Flight:: render("home", $data);
-    }
-
 }

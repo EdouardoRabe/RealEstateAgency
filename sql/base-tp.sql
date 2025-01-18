@@ -2,37 +2,30 @@ CREATE DATABASE agence;
 
 use agence;
 
--- 1. Create table for agence_user
-CREATE TABLE agence_user (
-    id_user INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    first_name VARCHAR(255) NOT NULL,
-    role ENUM('Admin', 'User') NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(20) NOT NULL
+-- Create the table for habitation types
+CREATE TABLE agence_habitation_type (
+    id_habitation_type INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL
 );
 
--- 2. Create table for agence_habitations
+-- Insert test data into agence_habitation_type
+INSERT INTO agence_habitation_type (name) 
+VALUES
+('House'),
+('Apartment'),
+('Studio');
+
+-- Create the table for habitations (with the foreign key reference to agence_habitation_type)
 CREATE TABLE agence_habitations (
     id_habitations INT PRIMARY KEY AUTO_INCREMENT,
-    type INT NOT NULL,  -- Type can be a foreign key to a types table if needed
+    type INT NOT NULL,  -- Foreign key to agence_habitation_type
     nb_chambres INT NOT NULL,
     loyer DECIMAL(10, 2) NOT NULL,
     image VARCHAR(255),  -- Path to image or URL
     quartier VARCHAR(255) NOT NULL,
-    description TEXT
+    description TEXT,
+    FOREIGN KEY (type) REFERENCES agence_habitation_type(id_habitation_type)
 );
-
--- 3. Create table for agence_reservation
-CREATE TABLE agence_reservation (
-    id_reservation INT PRIMARY KEY AUTO_INCREMENT,
-    arrival DATE NOT NULL,
-    departure DATE NOT NULL,
-    id_user INT,
-    FOREIGN KEY (id_user) REFERENCES agence_user(id_user)
-);
-
 
 -- Inserting test data into agence_user (already included)
 INSERT INTO agence_user (name, first_name, role, email, password, phone_number) 
@@ -71,3 +64,4 @@ VALUES
 ('2025-02-10', '2025-02-15', 2),  -- Jane Smith reserves
 ('2025-03-01', '2025-03-05', 1),  -- John Doe reserves
 ('2025-04-20', '2025-04-25', 3);  -- Alice Brown reserves
+
