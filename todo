@@ -1,0 +1,85 @@
+# AGENCE IMMOBILIERE
+
+## 1. Creation of Database
+
+- **agence_user** 
+  - `int id_user`
+  - `String name`
+  - `String first_name`
+  - `Enum("Admin, User")`
+  - `String email`
+  - `String password`
+  - `String phone_number`
+
+- **agence_habitations**
+  - `int id_habitations`
+  - `int type`
+  - `int nb_chambres`
+  - `Decimal loyer`
+  - `String image`
+  - `String quartier`
+  - `text description`
+
+- **agence_reservation**
+  - `int id_reservation`
+  - `date arrival`
+  - `date departure`
+  - `int id_user`
+
+# FRONT OFFICE
+
+## 1. Creation of pages:
+
+### + Login
+
+- **Affichage**:
+    - Using `generaliserModel -> generateInsertForm($table, $omitColumns = [], $redirectPage = '#', $method = 'POST')` to create inputs (name, first_name, email, password, phone_number)
+
+- **Data**:
+    - Using table `agence_user`
+
+- **Fonction**:
+    - Using `generaliserModel -> checkLogin($table, $omitColumns = [], $method = 'POST', $return = [])`
+
+- **Integration**:
+    - Creation of `loginController`:
+        - Creation of function `getLogin()` => "/login"
+        - Creation of function `checkLogin()` in `loginController` that calls `generaliserModel -> checkLogin`
+        - This function will redirect to `/` if `check["success"]==false` or to `/home` if true
+
+### + Signing
+
+- **Affichage**:
+    - Using `generaliserModel -> generateInsertForm($table, $omitColumns = [], $redirectPage = '#', $method = 'POST')` to create inputs (email, password, phone_number)
+
+- **Data**:
+    - Using table `agence_user`
+
+- **Fonction**:
+    - Using `generaliserModel -> insertData($table, $omitColumns = [], $method = 'POST')`
+
+- **Integration**:
+    - Creation of `loginController`:
+        - Creation of function `signUp()`
+        - This function will use `generaliserModel -> insertData`, and it will redirect to `/home`
+
+### + Home
+
+- **Affichage**:
+    - Using `HabitationModel -> getListHabitations(int type, int nbChambres, float loyer, String quartier)` where all these arguments will be null to retrieve all habitations
+    - Add link to image -> `{id_habitations to "/details?id_habitations"}`
+    - Add search bar -> `getListHabitations(int type, int nbChambres, float loyer, String quartier)`
+
+- **Data**:
+    - Using table `agence_user`
+
+- **Fonction**:
+    - Using `generaliserModel -> getListHabitations(int type, int nbChambres, float loyer, String quartier)`
+
+- **Integration**:
+    - Creation of `HomeController`:
+        - Function `getHome()` => "/home"
+
+
+            
+    

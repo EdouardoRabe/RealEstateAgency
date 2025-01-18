@@ -1,0 +1,61 @@
+/* Style de la section dépôt */
+.deposit-section {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    height: 100vh; /* Remplir toute la hauteur de la page */
+}
+
+.deposit-section .card {
+    border-radius: 12px;
+}
+
+.deposit-section .card-body {
+    padding: 2rem;
+}
+
+.deposit-section .form-label {
+    font-weight: bold;
+}
+
+.deposit-section input[type="number"] {
+    padding: 0.75rem;
+}
+
+/* Style général pour les alertes */
+.alert {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Style pour les messages de succès */
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Style pour les messages d'erreur */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Style pour l'icône d'alerte */
+.alert i {
+    margin-right: 10px;
+}
+
+
+/* Animation d'apparition des messages */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
