@@ -19,14 +19,6 @@ CREATE TABLE agence_user (
 
 
 
--- 3. Create table for agence_reservation
-CREATE TABLE agence_reservation (
-    id_reservation INT PRIMARY KEY AUTO_INCREMENT,
-    arrival DATE NOT NULL,
-    departure DATE NOT NULL,
-    id_user INT,
-    FOREIGN KEY (id_user) REFERENCES agence_user(id_user)
-);
 
 
 -- Create the table for habitation types
@@ -52,6 +44,18 @@ CREATE TABLE agence_habitations (
     description TEXT,
     FOREIGN KEY (type) REFERENCES agence_habitation_type(id_habitation_type)
 );
+
+-- 3. Create table for agence_reservation
+CREATE TABLE agence_reservation (
+    id_reservation INT PRIMARY KEY AUTO_INCREMENT,
+    arrival DATE NOT NULL,
+    departure DATE NOT NULL,
+    id_user INT,
+    id_habitation INT,
+    FOREIGN KEY (id_user) REFERENCES agence_user(id_user),
+    FOREIGN KEY (id_habitation) REFERENCES agence_habitations(id_habitation)
+);
+
 
 -- 4. Créer la table pour les images des habitations
 CREATE TABLE agence_habitation_images (
@@ -94,11 +98,11 @@ VALUES
 
 
 -- Inserting test data into agence_reservation (already included)
-INSERT INTO agence_reservation (arrival, departure, id_user)
+INSERT INTO agence_reservation (arrival, departure, id_user, id_habitation)
 VALUES
-('2025-02-10', '2025-02-15', 2),  -- Jane Smith reserves
-('2025-03-01', '2025-03-05', 1),  -- John Doe reserves
-('2025-04-20', '2025-04-25', 3);  -- Alice Brown reserves
+('2025-02-10', '2025-02-15', 2,1),  -- Jane Smith reserves
+('2025-03-01', '2025-03-05', 1,1),  -- John Doe reserves
+('2025-04-20', '2025-04-25', 3,1);  -- Alice Brown reserves
 
 -- Insérer des images pour chaque habitation (au moins 5 images par habitation)
 INSERT INTO agence_habitation_images (id_habitation, image_path)

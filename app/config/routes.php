@@ -7,6 +7,7 @@ use app\controllers\DetailController;
 use app\controllers\HabitationController;
 use app\controllers\LoginController;
 use app\controllers\RegenerationController;
+use app\controllers\ReservationController;
 use app\models\HabitationModel;
 use flight\Engine;
 use flight\net\Router;
@@ -23,13 +24,14 @@ use flight\net\Router;
 $login_controller=new LoginController();
 $habitation_controller=new HabitationController();
 $detail_controller= new DetailController();
+$reservation_controller=new ReservationController();
 
 $router-> get('/',[$login_controller,'getStart']);
 $router-> post('/checkLogin',[$login_controller,'checkLogin']);
 $router-> post('/signUp',[$login_controller,'signUp']);
 $router-> get('/home',[$habitation_controller,'getHome']);
 $router-> get('/detail',[$detail_controller, 'getDetail']);
-
+$router-> post("/reservation",[$reservation_controller,'makeReservation']);
 
 
 
