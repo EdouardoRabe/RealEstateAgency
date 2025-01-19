@@ -37,11 +37,18 @@ class AdminController {
         $habitationModel= Flight:: habitationModel();
         $generaliserModel=Flight:: generaliserModel();
         $habitations= $habitationModel-> getListHabitations(null,null,null,null,null,null);
-        $table= $generaliserModel-> generateTableau($habitations, $titre = "Liste des habitations", null, $omitColumns = ["id_habitation"], $crud = true, $redirectUpdate = null, "delete");
+        $table= $generaliserModel-> generateTableau($habitations, $titre = "Liste des habitations", null, $omitColumns = ["id_habitation", "isDeleted"], $crud = true, $redirectUpdate = null, "delete");
         $data=[
             "table"=>$table
         ];
         Flight::render("crud", $data);
+    }
+
+    public function delete(){
+        $generaliserModel=Flight:: generaliserModel();
+        $reponse = Flight::request()->query;
+        $delete= $generaliserModel-> updateTableData("agence_habitations", ["isDeleted"=> TRUE],$conditions = ["id_habitation"=>$reponse["id"]]);
+        Flight:: redirect("crud");
     }
 
 
