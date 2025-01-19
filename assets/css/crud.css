@@ -1,0 +1,100 @@
+.order {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.order .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.order .head h3 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+    font-weight: 600;
+}
+
+.order .head i {
+    font-size: 1.2em;
+    color: #666;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: color 0.3s;
+}
+
+.order .head i:hover {
+    color: #333;
+}
+
+.order table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 0.95em;
+}
+
+.order table th,
+.order table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.order table th {
+    background-color: #333;
+    color: #fff;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+.order table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.order table tbody tr:nth-child(even) {
+    background-color: #fdfdfd;
+}
+
+.order table tbody td {
+    color: #555;
+}
+
+.order table tbody td span.status.completed {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.order table tbody td span img {
+    max-height: 50px;
+    border-radius: 5px;
+}
+
+.order table tbody td a.crud-icon {
+    display: inline-block;
+    text-decoration: none;
+    color: #666;
+    font-size: 1.2em;
+    transition: color 0.3s;
+}
+
+.order table tbody td a.crud-icon:hover {
+    color: #333;
+}
+
+.order table tbody td a.crud-icon .bx-edit {
+    color: #28a745;
+}
+
+.order table tbody td a.crud-icon .bx-trash {
+    color: #dc3545;
+}
