@@ -1,0 +1,90 @@
+/* Conteneur principal des images */
+.habitation-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Image principale (grande à gauche) */
+.large-image {
+    flex: 1 1 80%;
+    max-width: 80%;
+}
+
+.image-large {
+    width: 100%;
+    height: auto;
+    border: 2px solid #ddd;
+    border-radius: 15px; /* Bordures arrondies */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Effet d'ombre */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation au survol */
+}
+
+/* Images de la grille (petites à droite) */
+.image-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 80%;
+}
+
+.image-item {
+    flex: 1 1 45%; /* Deux colonnes */
+}
+
+.image-small {
+    width: 100%;
+    height: auto;
+    border: 2px solid #ddd;
+    border-radius: 10px; /* Bordures arrondies */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Effet d'ombre */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation au survol */
+}
+
+/* Effet au survol des images */
+.image-large:hover, 
+.image-small:hover {
+    transform: scale(1.05); /* Agrandissement léger */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Ombre accentuée */
+    cursor: pointer; /* Indicateur visuel pour le survol */
+}
+
+/* Conteneur principal pour les images et le formulaire */
+.container {
+    display: flex; /* Organisation horizontale */
+    justify-content: space-between; /* Espacement entre les éléments */
+    align-items: flex-start; /* Alignement en haut */
+    gap: 20px; /* Espacement entre les images et le formulaire */
+}
+
+/* Section des images */
+.habitation-images {
+    flex: 3; /* Prend plus d'espace que le formulaire */
+}
+
+/* Section du formulaire */
+.form-container {
+    flex: 2; /* Prend moins d'espace que les images */
+    padding: 20px;
+    border: 2px solid #ddd; /* Bordure légère autour du formulaire */
+    border-radius: 10px; /* Bordures arrondies */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    background-color: #f9f9f9; /* Couleur de fond douce */
+}
+
+.form-container input {
+    display: block;
+    width: 100%; /* Inputs étendus à la largeur du formulaire */
+    margin-bottom: 15px; /* Espacement entre les inputs */
+    padding: 10px; /* Espacement interne des inputs */
+    border: 1px solid #ccc; /* Bordure légère pour les inputs */
+    border-radius: 5px; /* Bordures arrondies pour les inputs */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Ombre intérieure */
+    font-size: 14px;
+}
+
+.form-container input:focus {
+    border-color: #007BFF; /* Couleur de bordure en focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Effet lumineux */
+}

@@ -3,6 +3,7 @@
 use app\controllers\AdminController;
 use app\controllers\ConfirmationController;
 use app\controllers\DepotController;
+use app\controllers\DetailController;
 use app\controllers\HabitationController;
 use app\controllers\LoginController;
 use app\controllers\RegenerationController;
@@ -21,11 +22,13 @@ use flight\net\Router;
 
 $login_controller=new LoginController();
 $habitation_controller=new HabitationController();
+$detail_controller= new DetailController();
 
 $router-> get('/',[$login_controller,'getStart']);
 $router-> post('/checkLogin',[$login_controller,'checkLogin']);
 $router-> post('/signUp',[$login_controller,'signUp']);
 $router-> get('/home',[$habitation_controller,'getHome']);
+$router-> get('/detail',[$detail_controller, 'getDetail']);
 
 
 
