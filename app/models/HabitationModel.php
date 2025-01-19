@@ -21,7 +21,7 @@ class HabitationModel
                     FROM agence_habitations h
                     LEFT JOIN agence_habitation_type t ON h.type = t.id_habitation_type
                     LEFT JOIN agence_habitation_images i ON h.id_habitation = i.id_habitation
-                    WHERE 1 = 1";
+                    WHERE isDeleted=FALSE";
             $params = [];
             if (!is_null($type) && $type !== "") {
                 $query .= " AND h.type = :type";

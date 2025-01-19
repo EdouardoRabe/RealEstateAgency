@@ -36,6 +36,7 @@ $router-> post("/reservation",[$reservation_controller,'makeReservation']);
 $router-> get('/admin',[$admin_controller,'getStart']);
 $router-> post('/checkLoginAdmin',[$admin_controller,'checkLogin']);
 $router-> get('/crud',[$admin_controller,'getCrud']);
+$router-> get('/delete',[$admin_controller,'delete']);
 
 
 //$router->get('/', \app\controllers\WelcomeController::class.'->home'); 
