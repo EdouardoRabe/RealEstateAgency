@@ -17,9 +17,10 @@ class HabitationModel
     public function getListHabitations($type = null, $minNbChambres = null, $maxNbChambres = null, $minLoyer = null, $maxLoyer = null, $quartier = "")
     {
         try {
-            $query = "SELECT h.*, t.name AS type_name
+            $query = "SELECT h.*, t.name AS type_name, i.image_path
                     FROM agence_habitations h
                     LEFT JOIN agence_habitation_type t ON h.type = t.id_habitation_type
+                    LEFT JOIN agence_habitation_images i ON h.id_habitation = i.id_habitation
                     WHERE 1 = 1";
             $params = [];
             if (!is_null($type) && $type !== "") {
@@ -48,12 +49,29 @@ class HabitationModel
             }
             $stmt = $this->bdd->prepare($query);
             $stmt->execute($params);
-
-            return $stmt->fetchAll();
+            $habitaciones = $stmt->fetchAll();
+            $result = [];
+            foreach ($habitaciones as $habitation) {
+                $found = false;
+                foreach ($result as &$res) {
+                    if ($res['id_habitation'] === $habitation['id_habitation']) {
+                        $res['images'][] = $habitation['image_path'];
+                        $found = true;
+                        break;
+                    }
+                }
+                if (!$found) {
+                    $habitation['images'] = $habitation['image_path'] ? [$habitation['image_path']] : [];
+                    unset($habitation['image_path']); 
+                    $result[] = $habitation;
+                }
+            }
+            return $result;
         } catch (Exception $e) {
             throw new Exception("Erreur lors de la récupération des habitations : " . $e->getMessage());
         }
     }
+
 
 
 
@@ -62,14 +80,15 @@ class HabitationModel
         if (empty($habitations)) {
             return '<div class="no-results">Aucune habitation trouvée pour les critères spécifiés.</div>';
         }
-
         $cards = '';
         foreach ($habitations as $habitation) {
+            $image = !empty($habitation['images']) ? htmlspecialchars($habitation['images'][0]) : 'default-image.jpg'; // Image par défaut si aucune image
+
             $cards .= '
-                <a href="' . htmlspecialchars($linkPath) . '?id_habitations=' . urlencode($habitation['id_habitations']) . '" class="card-link">
+                <a href="' . htmlspecialchars($linkPath) . '?id_habitation=' . urlencode($habitation['id_habitation']) . '" class="card-link">
                     <div class="card">
                         <div class="card-image">
-                            <img src="' . htmlspecialchars($habitation['image']) . '" alt="Habitation Image" class="image">
+                            <img src="' . $image . '" alt="Habitation Image" class="image">
                         </div>
                         <div class="card-content">
                             <h3 class="card-title">' . htmlspecialchars($habitation['type_name']) . '</h3>
@@ -84,6 +103,7 @@ class HabitationModel
 
         return $cards;
     }
+
 
 
 
