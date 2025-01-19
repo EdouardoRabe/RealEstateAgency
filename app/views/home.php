@@ -9,6 +9,12 @@
 <body>
     <div class="container">
         <h1>Liste des Habitations</h1>
+      
+        <form action="home" method="get">
+            <?= $select?>
+            <?= $input?>
+            <input type="submit" value="Search">
+        </form>
         <div class="card-container">
             <?= $habitations ?>
         </div>
