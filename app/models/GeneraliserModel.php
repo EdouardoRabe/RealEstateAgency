@@ -392,7 +392,7 @@ class GeneraliserModel
     {
         $html= "<form action=\"$redirectPage\" method=\"$method\">";
         $html.=$this->generateInputFieldsWithDefaults($table, $omitColumns , $hidden , $conditions, $numericDouble, $canNull);
-        $html.= "<button type=\"submit\" class=\"btn btn-primary\">Submit</button>";
+        $html.= "<button type=\"submit\" class=\"btn btn-primary login-button\">Submit</button>";
         $html.= "</form>";
         return $html;
     }
@@ -563,7 +563,7 @@ class GeneraliserModel
             $html = "<div class=\"form-group\">";
             $html .= "<label for=\"$value\">$label</label>";
             $html .= "<select name=\"$value\" id=\"$value\" class=\"form-control\">";
-            $html .= "<option value=\"\">-- Sélectionnez --</option>";
+            $html .= "<option value=\"\">Choose</option>";
             
             foreach ($rows as $row) {
                 if (in_array($row[$value], $omitValues)) {
@@ -654,7 +654,7 @@ class GeneraliserModel
     {
         $html= "<form action=\"$redirectPage\" method=\"$method\">";
         $html.= $this-> generateInputFields($table, $omitColumns, $hidden, $canNull, $numericDouble); 
-        $html.= "<button type=\"submit\" class=\"btn btn-primary\">Submit</button>";
+        $html.= "<button type=\"submit\" class=\"btn btn-primary \">Submit</button>";
         $html.="</form>";
         return $html;
     }

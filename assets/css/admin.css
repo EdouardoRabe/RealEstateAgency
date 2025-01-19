@@ -1,0 +1,140 @@
+/* Variables */
+:root {
+    --primary-color: #4361ee;
+    --primary-hover: #3851db;
+    --background-color: #f8f9fa;
+    --text-color: #2d3748;
+    --border-radius: 8px;
+    --input-height: 42px;
+  }
+  
+  /* Style de base */
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f6f8fd 0%, #f1f4f9 100%);
+    padding: 1rem;
+  }
+  
+  /* Container du login */
+  .login-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 400px;
+    padding: 2.5rem;
+  }
+  
+  /* Header du formulaire */
+  .login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .login-header h1 {
+    font-size: 1.75rem;
+    color: var(--text-color);
+    margin-bottom: 0.75rem;
+  }
+  
+  .login-header p {
+    color: #718096;
+    font-size: 0.95rem;
+  }
+  
+  /* Style des form groups */
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+  }
+  
+  .form-control {
+    width: 100%;
+    height: var(--input-height);
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: var(--border-radius);
+    background-color: white;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+  }
+  
+  /* Style spécial pour le champ password */
+  input[type="password"].form-control {
+    letter-spacing: 0.1em;
+  }
+  
+  /* Bouton de connexion */
+  .login-button {
+    width: 100%;
+    height: var(--input-height);
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 1rem;
+  }
+  
+  .login-button:hover {
+    background-color: var(--primary-hover);
+  }
+  
+  /* Liens additionnels */
+  .login-links {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+  }
+  
+  .login-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  .login-links a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+  }
+  
+  /* Message d'erreur */
+  .error-message {
+    background-color: #fff5f5;
+    color: #e53e3e;
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    border: 1px solid #feb2b2;
+  }
+  
+  /* Responsive */
+  @media (max-width: 480px) {
+    .login-container {
+      padding: 2rem 1.5rem;
+    }
+    
+    .login-header h1 {
+      font-size: 1.5rem;
+    }
+  }
