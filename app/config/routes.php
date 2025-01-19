@@ -25,6 +25,7 @@ $login_controller=new LoginController();
 $habitation_controller=new HabitationController();
 $detail_controller= new DetailController();
 $reservation_controller=new ReservationController();
+$admin_controller=new AdminController();
 
 $router-> get('/',[$login_controller,'getStart']);
 $router-> post('/checkLogin',[$login_controller,'checkLogin']);
@@ -32,7 +33,9 @@ $router-> post('/signUp',[$login_controller,'signUp']);
 $router-> get('/home',[$habitation_controller,'getHome']);
 $router-> get('/detail',[$detail_controller, 'getDetail']);
 $router-> post("/reservation",[$reservation_controller,'makeReservation']);
-
+$router-> get('/admin',[$admin_controller,'getStart']);
+$router-> post('/checkLoginAdmin',[$admin_controller,'checkLogin']);
+$router-> get('/crud',[$admin_controller,'getCrud']);
 
 
 //$router->get('/', \app\controllers\WelcomeController::class.'->home'); 

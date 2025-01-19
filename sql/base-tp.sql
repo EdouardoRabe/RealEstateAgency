@@ -69,6 +69,7 @@ CREATE TABLE agence_habitation_images (
 INSERT INTO agence_user (name, first_name, role, email, password, phone_number) 
 VALUES
 ('John', 'Doe', 'Admin', 'john.doe@example.com', 'password123', '0123456789'),
+('Rabe', 'Edouardo', 'Admin', 'john.doe@example.com', 'password123', '0123456789'),
 ('Jane', 'Smith', 'User', 'jane.smith@example.com', 'password456', '0987654321'),
 ('Alice', 'Brown', 'User', 'alice.brown@example.com', 'password789', '0112233445');
 

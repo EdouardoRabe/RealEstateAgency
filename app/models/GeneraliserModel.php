@@ -14,22 +14,24 @@ class GeneraliserModel
         $this->bdd = $bdd;
     }
 
-    public function generateTableau($liste, $titre = "Tableau Dynamique", $colonneMiseEnEvidence = null)
+    public function generateTableau($liste, $titre = "Tableau Dynamique", $colonneMiseEnEvidence = null, $omitColumns = [], $crud = false, $redirectUpdate = null, $redirectDelete = null)
     {
         if (empty($liste)) {
-            return "<div class='order'><p>Aucune donnée disponible pour " . htmlspecialchars(ucfirst($titre)) . " .</p></div>";
+            return "<div class='order'><p>Aucune donnée disponible pour " . htmlspecialchars(ucfirst($titre)) . ".</p></div>";
         }
-
-        $entetes = array_filter(array_keys($liste[0]), function ($key) {
-            return is_string($key) && stripos($key, 'id') !== 0;
+        $entetes = array_filter(array_keys($liste[0]), function ($key) use ($omitColumns) {
+            return is_string($key) && !in_array($key, $omitColumns) && stripos($key, 'id') !== 0;
         });
-
+        if ($crud) {
+            $entetes[] = 'Modifier';
+            $entetes[] = 'Supprimer';
+        }
         $html = "
         <div class='order'>
             <div class='head'>
                 <h3>$titre</h3>
-                <i class='bx bx-search'></i>
-                <i class='bx bx-filter'></i>
+                <i class='fas fa-search'></i>
+                <i class='fas fa-filter'></i>
             </div>
             <table>
                 <thead>
@@ -41,22 +43,35 @@ class GeneraliserModel
                     </tr>
                 </thead>
                 <tbody>";
+
         foreach ($liste as $item) {
             $html .= "<tr>";
             foreach ($entetes as $entete) {
-                $classe = ($entete === $colonneMiseEnEvidence) ? 'status completed' : '';
-                $html .= "<td><span class='{$classe}'>" . htmlspecialchars($item[$entete]) . "</span></td>";
+                if ($entete === 'Modifier') {
+                    $updateUrl = $redirectUpdate ? htmlspecialchars($redirectUpdate . "?id=" . $item['id_habitation']) : "#";
+                    $html .= "<td><a href='{$updateUrl}' class='crud-icon'><i class='fas fa-edit' style='color:#0c81ee;'></i></a></td>";
+                } else if ($entete === 'Supprimer') {
+                    $deleteUrl = $redirectDelete ? htmlspecialchars($redirectDelete . "?id=" . $item['id_habitation']) : "#";
+                    $html .= "<td><a href='{$deleteUrl}' class='crud-icon'><i class='fas fa-trash-alt' style='color:#ff3d3d;'></i></a></td>";
+                } else {
+                    $classe = ($entete === $colonneMiseEnEvidence) ? 'status completed' : '';
+                    if ($entete == "images") {
+                        $html .= "<td><span class='{$classe}'><img src='assets/img/" . $item[$entete][0] . "'></span></td>";
+                    } else {
+                        $html .= "<td><span class='{$classe}'>" . $item[$entete] . "</span></td>";
+                    }
+                }
             }
             $html .= "</tr>";
         }
-
         $html .= "
                 </tbody>
             </table>
         </div>";
-
         return $html;
     }
+
+
 
   
 
@@ -289,8 +304,12 @@ class GeneraliserModel
     
 
 
-    public function generateInputFieldsWithDefaults($table, $omitColumns = [], $conditions = [])
+    public function generateInputFieldsWithDefaults($table, $omitColumns = [], $hidden = [], $conditions = [], $numericDouble = [], $canNull = false)
     {
+        $html = "";
+        foreach ($hidden as $hiddenName => $hiddenValue) {
+            $html .= "<input type=\"hidden\" name=\"{$hiddenName}\" value=\"{$hiddenValue}\">";
+        }
         try {
             $query = "DESCRIBE $table";
             $stmt = $this->bdd->prepare($query);
@@ -321,41 +340,58 @@ class GeneraliserModel
                 'datetime' => 'datetime-local',
                 'text' => 'textarea'
             ];
-
             foreach ($columns as $column) {
                 $columnName = $column['Field'];
                 $columnType = strtolower($column['Type']);
                 if (in_array($columnName, $omitColumns)) {
                     continue;
                 }
-
                 $inputType = 'text';
-                foreach ($columnTypes as $dbType => $inputTypeValue) {
-                    if (strpos($columnType, $dbType) !== false) {
-                        $inputType = $inputTypeValue;
-                        break;
+                if ($columnName === 'password') {
+                    $inputType = 'password';
+                } else {
+                    foreach ($columnTypes as $dbType => $inputTypeValue) {
+                        if (strpos($columnType, $dbType) !== false) {
+                            $inputType = $inputTypeValue;
+                            break;
+                        }
                     }
                 }
-
                 $defaultValue = $defaultValues[$columnName] ?? '';
-                 "<div class=\"form-group\">";
-                $html= "<label for=\"$columnName\">" . ucfirst(str_replace('_', ' ', $columnName)) . "</label>";
-                if ($inputType == 'textarea') {
-                    $html.= "<textarea name=\"$columnName\" id=\"$columnName\" class=\"form-control\">$defaultValue</textarea>";
+                if (in_array($columnName, $numericDouble)) {
+                    $html .= "<div class=\"form-group\">";
+                    $html .= "<label for=\"min_{$columnName}\">Min " . ucfirst(str_replace('_', ' ', $columnName)) . "</label>";
+                    $html .= "<input type=\"{$inputType}\" name=\"min_{$columnName}\" id=\"min_{$columnName}\" class=\"form-control\" value=\"\" " . ($canNull ? '' : 'required') . " />";
+                    $html .= "</div>";
+                    $html .= "<div class=\"form-group\">";
+                    $html .= "<label for=\"max_{$columnName}\">Max " . ucfirst(str_replace('_', ' ', $columnName)) . "</label>";
+                    $html .= "<input type=\"{$inputType}\" name=\"max_{$columnName}\" id=\"max_{$columnName}\" class=\"form-control\" value=\"\" " . ($canNull ? '' : 'required') . " />";
+                    $html .= "</div>";
                 } else {
-                    $html.= "<input type=\"$inputType\" name=\"$columnName\" id=\"$columnName\" class=\"form-control\" value=\"$defaultValue\" required />";
+                    $required = $canNull ? '' : 'required';
+                    $html .= "<div class=\"form-group\">";
+                    $html .= "<label for=\"{$columnName}\">" . ucfirst(str_replace('_', ' ', $columnName)) . "</label>";
+                    if ($inputType === 'textarea') {
+                        $html .= "<textarea name=\"{$columnName}\" id=\"{$columnName}\" class=\"form-control\" $required>{$defaultValue}</textarea>";
+                    } else {
+                        $html .= "<input type=\"{$inputType}\" name=\"{$columnName}\" id=\"{$columnName}\" class=\"form-control\" value=\"{$defaultValue}\" $required />";
+                    }
+                    $html .= "</div>";
                 }
-                $html.= "</div>";
             }
         } catch (Exception $e) {
-            $html.= "Erreur lors de la génération des champs : " . $e->getMessage();
+            $html .= "Erreur lors de la génération des champs : " . $e->getMessage();
         }
+
+        return $html;
     }
 
-    public function generateInsertFormWithDefaults($table, $omitColumns = [], $redirectPage = '#', $method = 'POST', $conditions = [])
+
+
+    public function generateInsertFormWithDefaults($table, $omitColumns = [], $redirectPage = '#', $method = 'POST', $hidden = [], $conditions = [], $numericDouble = [], $canNull = false)
     {
         $html= "<form action=\"$redirectPage\" method=\"$method\">";
-        $html.=$this->generateInputFieldsWithDefaults($table, $omitColumns, $conditions);
+        $html.=$this->generateInputFieldsWithDefaults($table, $omitColumns , $hidden , $conditions, $numericDouble, $canNull);
         $html.= "<button type=\"submit\" class=\"btn btn-primary\">Submit</button>";
         $html.= "</form>";
         return $html;
