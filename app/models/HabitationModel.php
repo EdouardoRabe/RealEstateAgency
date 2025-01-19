@@ -103,8 +103,6 @@ class HabitationModel
 
 
 
-
-
     public function generateHabitationsCard($habitations, $linkPath)
     {
         if (empty($habitations)) {
@@ -112,25 +110,33 @@ class HabitationModel
         }
         $cards = '';
         foreach ($habitations as $habitation) {
-            $image = !empty($habitation['images']) ? htmlspecialchars($habitation['images'][0]) : 'default-image.jpg'; // Image par défaut si aucune image
-
+            $image = !empty($habitation['images']) ? htmlspecialchars($habitation['images'][0]) : 'default-image.jpg';
             $cards .= '
                 <a href="' . htmlspecialchars($linkPath) . '?id_habitation=' . urlencode($habitation['id_habitation']) . '" class="card-link">
                     <div class="card">
                         <div class="card-image">
                             <img src="assets/img/' . $image . '" alt="Habitation Image" class="image">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">' . htmlspecialchars($habitation['type_name']) . '</h3>
-                            <p class="card-info"><strong>Chambres:</strong> ' . htmlspecialchars($habitation['nb_chambres']) . '</p>
-                            <p class="card-info"><strong>Loyer:</strong> ' . htmlspecialchars($habitation['loyer']) . ' €</p>
-                            <p class="card-info"><strong>Quartier:</strong> ' . htmlspecialchars($habitation['quartier']) . '</p>
-                            <p class="card-description">' . htmlspecialchars($habitation['description']) . '</p>
+                            <div class="card-overlay">
+                                <div class="price-badge">' . htmlspecialchars($habitation['loyer']) . ' €</div>
+                                <div class="card-details">
+                                    <h3 class="card-title">' . htmlspecialchars($habitation['type_name']) . '</h3>
+                                    <div class="card-stats">
+                                        <div class="stat">
+                                            <i class="fas fa-bed"></i>
+                                            <span>' . htmlspecialchars($habitation['nb_chambres']) . ' chambres</span>
+                                        </div>
+                                        <div class="stat">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>' . htmlspecialchars($habitation['quartier']) . '</span>
+                                        </div>
+                                    </div>
+                                    <p class="card-description">' . htmlspecialchars($habitation['description']) . '</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </a>';
         }
-
         return $cards;
     }
 

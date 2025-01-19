@@ -28,7 +28,7 @@ class HabitationController
         $cards = $habitationModel->generateHabitationsCard($habitations,$path); 
 
         $select = $generaliserModel->generateSelectField("agence_habitation_type", "id_habitation_type", "name", null);
-        $input = $generaliserModel->generateInputFields("agence_habitations", ["type", "description", "id_habitation", "image"],[],true,["nb_chambres","loyer"]);
+        $input = $generaliserModel->generateInputFields("agence_habitations", ["type", "description", "id_habitation", "image","isDeleted"],[],true,["nb_chambres","loyer"]);
 
         $data = [
             "habitations" => $cards,
