@@ -19,14 +19,13 @@ use flight\net\Router;
 	$app->render('welcome', [ 'message' => 'It works!!' ]);
 });*/
 
-$racine="";
 $login_controller=new LoginController();
 $habitation_controller=new HabitationController();
 
 $router-> get('/',[$login_controller,'getStart']);
-$router-> post($racine.'/checkLogin',[$login_controller,'checkLogin']);
-$router-> post($racine.'/signUp',[$login_controller,'signUp']);
-$router-> get($racine.'/home',[$habitation_controller,'getHome']);
+$router-> post('/checkLogin',[$login_controller,'checkLogin']);
+$router-> post('/signUp',[$login_controller,'signUp']);
+$router-> get('/home',[$habitation_controller,'getHome']);
 
 
 

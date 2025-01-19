@@ -2,6 +2,29 @@ CREATE DATABASE agence;
 
 use agence;
 
+-- 1. Create table for agence_user
+CREATE TABLE agence_user (
+    id_user INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    role ENUM('Admin', 'User') NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL
+);
+
+
+
+-- 3. Create table for agence_reservation
+CREATE TABLE agence_reservation (
+    id_reservation INT PRIMARY KEY AUTO_INCREMENT,
+    arrival DATE NOT NULL,
+    departure DATE NOT NULL,
+    id_user INT,
+    FOREIGN KEY (id_user) REFERENCES agence_user(id_user)
+);
+
+
 -- Create the table for habitation types
 CREATE TABLE agence_habitation_type (
     id_habitation_type INT PRIMARY KEY AUTO_INCREMENT,

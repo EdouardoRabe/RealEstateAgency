@@ -58,67 +58,9 @@ class GeneraliserModel
         return $html;
     }
 
-    public function generateInputFields($table, $omitColumns = [], $hidden = [])
-    {
-        foreach ($hidden as $hiddenName => $hiddenValue) {
-            echo "<input type=\"hidden\" name=\"{$hiddenName}\" value=\"{$hiddenValue}\">";
-        }
+  
 
-        $query = "DESCRIBE $table";
-        $stmt = $this->bdd->prepare($query);
-        $stmt->execute();
-        $columns = $stmt->fetchAll();
-
-        $columnTypes = [
-            'int' => 'number',
-            'float' => 'number',
-            'decimal' => 'number',
-            'number' => 'number',
-            'varchar' => 'text',
-            'char' => 'text',
-            'date' => 'date',
-            'datetime' => 'datetime-local',
-            'text' => 'textarea'
-        ];
-
-        foreach ($columns as $column) {
-            $columnName = $column['Field'];
-            $columnType = strtolower($column['Type']);
-            $inputType = 'text';
-
-            if (in_array($columnName, $omitColumns)) {
-                continue;
-            }
-
-            if ($columnName === 'password') {
-                $inputType = 'password';
-            } else {
-                foreach ($columnTypes as $dbType => $inputTypeValue) {
-                    if (strpos($columnType, $dbType) !== false) {
-                        $inputType = $inputTypeValue;
-                        break;
-                    }
-                }
-            }
-            echo "<div class=\"form-group\">";
-            echo "<label for=\"{$columnName}\">" . ucfirst(str_replace('_', ' ', $columnName)) . "</label>";
-            if ($inputType === 'textarea') {
-                echo "<textarea name=\"{$columnName}\" id=\"{$columnName}\" class=\"form-control\"></textarea>";
-            } else {
-                echo "<input type=\"{$inputType}\" name=\"{$columnName}\" id=\"{$columnName}\" class=\"form-control\" required />";
-            }
-            echo "</div>";
-        }
-    }
-
-    public function generateInsertForm($table, $omitColumns = [], $redirectPage = '#', $method = 'POST', $hidden = [])
-    {
-        echo "<form action=\"$redirectPage\" method=\"$method\">";
-        $this->generateInputFields($table, $omitColumns, $hidden); 
-        echo "<button type=\"submit\" class=\"btn btn-primary\">Submit</button>";
-        echo "</form>";
-    }
-
+  
 
 
     public function getFormData($table, $omitColumns = [], $method = 'POST')
@@ -396,26 +338,27 @@ class GeneraliserModel
                 }
 
                 $defaultValue = $defaultValues[$columnName] ?? '';
-                echo "<div class=\"form-group\">";
-                echo "<label for=\"$columnName\">" . ucfirst(str_replace('_', ' ', $columnName)) . "</label>";
+                 "<div class=\"form-group\">";
+                $html= "<label for=\"$columnName\">" . ucfirst(str_replace('_', ' ', $columnName)) . "</label>";
                 if ($inputType == 'textarea') {
-                    echo "<textarea name=\"$columnName\" id=\"$columnName\" class=\"form-control\">$defaultValue</textarea>";
+                    $html.= "<textarea name=\"$columnName\" id=\"$columnName\" class=\"form-control\">$defaultValue</textarea>";
                 } else {
-                    echo "<input type=\"$inputType\" name=\"$columnName\" id=\"$columnName\" class=\"form-control\" value=\"$defaultValue\" required />";
+                    $html.= "<input type=\"$inputType\" name=\"$columnName\" id=\"$columnName\" class=\"form-control\" value=\"$defaultValue\" required />";
                 }
-                echo "</div>";
+                $html.= "</div>";
             }
         } catch (Exception $e) {
-            echo "Erreur lors de la génération des champs : " . $e->getMessage();
+            $html.= "Erreur lors de la génération des champs : " . $e->getMessage();
         }
     }
 
     public function generateInsertFormWithDefaults($table, $omitColumns = [], $redirectPage = '#', $method = 'POST', $conditions = [])
     {
-        echo "<form action=\"$redirectPage\" method=\"$method\">";
-        $this->generateInputFieldsWithDefaults($table, $omitColumns, $conditions);
-        echo "<button type=\"submit\" class=\"btn btn-primary\">Submit</button>";
-        echo "</form>";
+        $html= "<form action=\"$redirectPage\" method=\"$method\">";
+        $html.=$this->generateInputFieldsWithDefaults($table, $omitColumns, $conditions);
+        $html.= "<button type=\"submit\" class=\"btn btn-primary\">Submit</button>";
+        $html.= "</form>";
+        return $html;
     }
 
     public function getLastInsertedId($table, $idColumn)
@@ -570,31 +513,118 @@ class GeneraliserModel
     }
 
 
-    public function generateSelectField($table, $column, $label = null, $omitValues = [])
+    public function generateSelectField($table, $value, $column, $label = null, $omitValues = [])
     {
-        $query = "SELECT DISTINCT $column FROM $table";
+        try {
+            $query = "SELECT DISTINCT $value, $column FROM $table";
+            $stmt = $this->bdd->prepare($query);
+            $stmt->execute();
+            $rows = $stmt->fetchAll();
+            if ($label === null) {
+                $label = ucfirst(str_replace('_', ' ', $column));
+            }
+            
+            $html = "<div class=\"form-group\">";
+            $html .= "<label for=\"$value\">$label</label>";
+            $html .= "<select name=\"$value\" id=\"$value\" class=\"form-control\">";
+            $html .= "<option value=\"\">-- Sélectionnez --</option>";
+            
+            foreach ($rows as $row) {
+                if (in_array($row[$value], $omitValues)) {
+                    continue; 
+                }
+                $optionValue = htmlspecialchars($row[$value]); 
+                $displayText = htmlspecialchars($row[$column]); 
+                $html .= "<option value=\"{$optionValue}\">{$displayText}</option>";
+            }
+            
+            $html .= "</select>";
+            $html .= "</div>";
+            
+            return $html; 
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la génération du champ select : " . $e->getMessage());
+        }
+    }
+
+   
+
+
+    public function generateInputFields($table, $omitColumns = [], $hidden = [], $canNull = false, $numericDouble = [])
+    {
+        $html = "";
+        foreach ($hidden as $hiddenName => $hiddenValue) {
+            $html .= "<input type=\"hidden\" name=\"{$hiddenName}\" value=\"{$hiddenValue}\">";
+        }
+        $query = "DESCRIBE $table";
         $stmt = $this->bdd->prepare($query);
         $stmt->execute();
-        $rows = $stmt->fetchAll(); 
-        $values = array_column($rows, $column);
-        if ($label === null) {
-            $label = ucfirst(str_replace('_', ' ', $column));
-        }
-        echo "<div class=\"form-group\">";
-        echo "<label for=\"$column\">$label</label>";
-        echo "<select name=\"$column\" id=\"$column\" class=\"form-control\">";
-        echo "<option value=\"\">-- Sélectionnez --</option>";
-        foreach ($values as $value) {
-            if (in_array($value, $omitValues)) {
+        $columns = $stmt->fetchAll();
+        $columnTypes = [
+            'int' => 'number',
+            'float' => 'number',
+            'decimal' => 'number',
+            'number' => 'number',
+            'varchar' => 'text',
+            'char' => 'text',
+            'date' => 'date',
+            'datetime' => 'datetime-local',
+            'text' => 'textarea'
+        ];
+        foreach ($columns as $column) {
+            $columnName = $column['Field'];
+            $columnType = strtolower($column['Type']);
+            $inputType = 'text';
+            if (in_array($columnName, $omitColumns)) {
                 continue;
             }
-            if (is_scalar($value)) {
-                echo "<option value=\"{$value}\">{$value}</option>";
+            if ($columnName === 'password') {
+                $inputType = 'password';
+            } else {
+                foreach ($columnTypes as $dbType => $inputTypeValue) {
+                    if (strpos($columnType, $dbType) !== false) {
+                        $inputType = $inputTypeValue;
+                        break;
+                    }
+                }
+            }
+            if (in_array($columnName, $numericDouble)) {
+                $html .= "<div class=\"form-group\">";
+                $html .= "<label for=\"min_{$columnName}\">Min " . ucfirst(str_replace('_', ' ', $columnName)) . "</label>";
+                $html .= "<input type=\"{$inputType}\" name=\"min_{$columnName}\" id=\"min_{$columnName}\" class=\"form-control\" " . ($canNull ? '' : 'required') . " />";
+                $html .= "</div>";
+                $html .= "<div class=\"form-group\">";
+                $html .= "<label for=\"max_{$columnName}\">Max " . ucfirst(str_replace('_', ' ', $columnName)) . "</label>";
+                $html .= "<input type=\"{$inputType}\" name=\"max_{$columnName}\" id=\"max_{$columnName}\" class=\"form-control\" " . ($canNull ? '' : 'required') . " />";
+                $html .= "</div>";
+            } else {
+                $required = $canNull ? '' : 'required';
+                $html .= "<div class=\"form-group\">";
+                $html .= "<label for=\"{$columnName}\">" . ucfirst(str_replace('_', ' ', $columnName)) . "</label>";
+                if ($inputType === 'textarea') {
+                    $html .= "<textarea name=\"{$columnName}\" id=\"{$columnName}\" class=\"form-control\" $required></textarea>";
+                } else {
+                    $html .= "<input type=\"{$inputType}\" name=\"{$columnName}\" id=\"{$columnName}\" class=\"form-control\" $required />";
+                }
+                $html .= "</div>";
             }
         }
-        echo "</select>";
-        echo "</div>";
+        
+        return $html;
     }
+
+
+    public function generateInsertForm($table, $omitColumns = [], $redirectPage = '#', $method = 'POST', $hidden = [], $canNull=false, $numericDouble=[])
+    {
+        $html= "<form action=\"$redirectPage\" method=\"$method\">";
+        $html.= $this-> generateInputFields($table, $omitColumns, $hidden, $canNull, $numericDouble); 
+        $html.= "<button type=\"submit\" class=\"btn btn-primary\">Submit</button>";
+        $html.="</form>";
+        return $html;
+    }
+    
+
+
 
 
     public function generateLoginSignupForms($table, $omitColumnsSignup = [], $omitColumnsLogin = [], $redirectPageSignup = '#', $redirectPageLogin = '#', $method = 'POST')
