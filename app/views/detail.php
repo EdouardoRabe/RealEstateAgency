@@ -15,7 +15,13 @@
         <!-- Le formulaire à droite -->
         <div class="form-container">
             <h1>An habitation located at <?= $habitation["quartier"]?></h1>
-            <p><?= $habitation["description"]?></p>
+            <p style="text-align: center;"><?= $habitation["description"]?></p>
+            <?php if ($message!="" && $status!=""): ?>
+                <div class="message-box <?= $status ?>">
+                    <?= $message ?>
+                </div>
+            <?php endif; ?>
+
             <?= $form ?>
         </div>
     </div>
