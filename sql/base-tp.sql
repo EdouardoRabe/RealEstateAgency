@@ -69,7 +69,7 @@ CREATE TABLE agence_habitation_images (
 INSERT INTO agence_user (name, first_name, role, email, password, phone_number) 
 VALUES
 ('John', 'Doe', 'Admin', 'john.doe@example.com', 'password123', '0123456789'),
-('Rabe', 'Edouardo', 'Admin', 'john.doe@example.com', 'password123', '0123456789'),
+('Rabe', 'Edouardo', 'Admin', 'edouardo@gmail.com', 'rabe', '0123456789'),
 ('Jane', 'Smith', 'User', 'jane.smith@example.com', 'password456', '0987654321'),
 ('Alice', 'Brown', 'User', 'alice.brown@example.com', 'password789', '0112233445');
 
@@ -129,3 +129,11 @@ VALUES
 (19, 'cottage4_image1.jpg'), (19, 'cottage4_image2.jpg'), (19, 'cottage4_image3.jpg'), (19, 'cottage4_image4.jpg'), (19, 'cottage4_image5.jpg');
 
 
+-- Ajouter une colonne isDeleted à la table agence_habitations
+ALTER TABLE agence_habitations
+ADD COLUMN isDeleted BOOLEAN DEFAULT FALSE;
+
+-- Mettre à jour les données de test de la table agence_habitations
+UPDATE agence_habitations
+SET isDeleted = FALSE
+WHERE id_habitation IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19);
