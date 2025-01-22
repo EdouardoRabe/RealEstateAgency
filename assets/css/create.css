@@ -114,6 +114,30 @@ input[type="submit"]:active {
     border-left: 3px solid #2563eb;
 }
 
+.error-message {
+    color: #fff;
+    background-color: #e74c3c; /* Couleur rouge pour les erreurs */
+    border: 1px solid #c0392b;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Responsive design */
 @media (max-width: 640px) {
     form {
