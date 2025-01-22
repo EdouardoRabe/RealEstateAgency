@@ -509,8 +509,6 @@ class GeneraliserModel
         $result = Flight::bdd()->exec($sql);
         return ['status'=>'success'];
     }
-    
-    
 
     public function deleteData($table, $conditions = [])
     {
