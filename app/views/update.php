@@ -9,14 +9,20 @@
 </head>
 <body>
     <nav class="navbar">
-        <?php if(isset($id)) { ?>
-            <form action="upload?id=<?= $id ?>" method="post" enctype="multipart/form-data">
+        <?php if (isset($_GET["error"])) { ?>
+            <div class="error-message">
+                <?= htmlspecialchars($_GET["error"]) ?>
+            </div>
+        <?php } ?>
+
+        <?php if (isset($id)) { ?>
+            <form action="upload?id=<?= htmlspecialchars($id) ?>" method="post" enctype="multipart/form-data">
                 <?= $upload ?>
                 <?= $select ?>
                 <?= $input ?>
                 <input type="submit" value="Valid">
             </form>
-        <?php } else {?>
+        <?php } else { ?>
             <form action="creation" method="post" enctype="multipart/form-data">
                 <?= $upload ?>
                 <?= $select ?>

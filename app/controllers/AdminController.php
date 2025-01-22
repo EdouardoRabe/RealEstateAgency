@@ -93,12 +93,8 @@ class AdminController {
         $quartier = $_POST['quartier'];
         $desc = $_POST['description'];
         $files = $_FILES['file'];
-        $type=$_POST['id_habitation_type'];
+        $type = $_POST['id_habitation_type'];
         $nomTableImages = "agence_habitation_images";
-        $deleteImage = $generaliserModel->deleteData($nomTableImages, ["id_habitation" => $id_habitation]);
-        if ($deleteImage['success'] === false) {
-            die("Erreur lors de la suppression des anciennes images : " . $deleteImage['message']);
-        }
         $nomTableHabitations = "agence_habitations";
         $dataHabitations = [
             "nb_chambres" => $nb_chambres,
@@ -106,15 +102,21 @@ class AdminController {
             "quartier" => $quartier,
             "description" => $desc
         ];
-        
-        if (!empty($type)) { 
+    
+        if (!empty($type)) {
             $dataHabitations["type"] = $type;
         }
-        
+    
+        // Mise à jour des données de l'habitation
         $updateTable = $generaliserModel->updateTableData($nomTableHabitations, $dataHabitations, ["id_habitation" => $id_habitation]);
         if ($updateTable['status'] !== "success") {
-            die("Erreur lors de l'insertion de l'habitation : " . $updateTable['message']);
+            Flight::redirect("update?id=$id_habitation&error=" . urlencode("Erreur lors de la mise à jour de l'habitation : " . $updateTable['message']));
+            return;
         }
+    
+        $isFirstImageInserted = false;
+    
+        // Parcourir les fichiers pour l'upload
         foreach ($files['name'] as $key => $fileName) {
             $file = [
                 'name' => $files['name'][$key],
@@ -124,25 +126,36 @@ class AdminController {
                 'size' => $files['size'][$key]
             ];
             $erreur = $uploadModel->checkError($file);
-    
             if ($erreur != 0) {
-                Flight::redirect("update?id=" . $id_habitation);
+                Flight::redirect("update?id=$id_habitation&error=" . urlencode("Erreur lors du téléchargement de l'image : " . $fileName));
+                return;
             } else {
                 $upload_image = $uploadModel->uploadImg($file);
                 $dataImages = [
                     "id_habitation" => $id_habitation,
                     "image_path" => $upload_image
                 ];
-                $insertBaseImages = $generaliserModel->insererDonnee($nomTableImages, $dataImages);
     
+                $insertBaseImages = $generaliserModel->insererDonnee($nomTableImages, $dataImages);
                 if ($insertBaseImages['status'] !== "success") {
-                    die("Erreur lors de l'insertion de l'image : " . $insertBaseImages['message']);
+                    Flight::redirect("update?id=$id_habitation&error=" . urlencode("Erreur lors de l'insertion de l'image : " . $insertBaseImages['message']));
+                    return;
+                }
+                if (!$isFirstImageInserted) {
+                    $deleteImage = $generaliserModel->deleteData($nomTableImages, ["id_habitation" => $id_habitation]);
+                    if ($deleteImage['success'] === false) {
+                        Flight::redirect("update?id=$id_habitation&error=" . urlencode("Erreur lors de la suppression des anciennes images : " . $deleteImage['message']));
+                        return;
+                    }
+                    $isFirstImageInserted = true;
                 }
             }
         }
     
         Flight::redirect("crud");
     }
+    
+    
 
     public function creation() {
         $uploadModel = Flight::uploadModel();
@@ -152,7 +165,7 @@ class AdminController {
         $quartier = $_POST['quartier'];
         $desc = $_POST['description'];
         $files = $_FILES['file'];
-        $type=$_POST['id_habitation_type'];
+        $type = $_POST['id_habitation_type'];
         $nomTableImages = "agence_habitation_images";
         $nomTableHabitations = "agence_habitations";
         $dataHabitations = [
@@ -161,15 +174,20 @@ class AdminController {
             "quartier" => $quartier,
             "description" => $desc
         ];
-        
         if (!empty($type)) { 
             $dataHabitations["type"] = $type;
         }
-        
         $updateTable = $generaliserModel->insererDonnee($nomTableHabitations, $dataHabitations);
-        $lastID=$generaliserModel ->getLastInsertedId($nomTableHabitations, "id_habitation");
         if ($updateTable['status'] !== "success") {
-            die("Erreur lors de l'insertion de l'habitation : " . $updateTable['message']);
+            $message = "Erreur lors de l'insertion de l'habitation : " . htmlspecialchars($updateTable['message']);
+            Flight::redirect("creation?error=" . urlencode($message));
+            exit;
+        }
+        $lastID = $generaliserModel->getLastInsertedId($nomTableHabitations, "id_habitation");
+        if (!isset($lastID['last_id'])) {
+            $message = "Erreur : impossible de récupérer l'ID de l'habitation insérée.";
+            Flight::redirect("creation?error=" . urlencode($message));
+            exit;
         }
         foreach ($files['name'] as $key => $fileName) {
             $file = [
@@ -181,23 +199,30 @@ class AdminController {
             ];
             $erreur = $uploadModel->checkError($file);
             if ($erreur != 0) {
-                Flight::redirect("creation?error");
-            } else {
-                $upload_image = $uploadModel->uploadImg($file);
-                $dataImages = [
-                    "id_habitation" => $lastID["last_id"] ,
-                    "image_path" => $upload_image
-                ];
-                $insertBaseImages = $generaliserModel->insererDonnee($nomTableImages, $dataImages);
-    
-                if ($insertBaseImages['status'] !== "success") {
-                    die("Erreur lors de l'insertion de l'image : " . $insertBaseImages['message']);
-                }
+                $message = "Erreur lors de l'upload du fichier : le fichier " . htmlspecialchars($fileName) . " est invalide.";
+                Flight::redirect("creation?error=" . urlencode($message));
+                exit;
+            }
+            $upload_image = $uploadModel->uploadImg($file);
+            if (!$upload_image) {
+                $message = "Erreur lors de l'upload de l'image : " . htmlspecialchars($fileName);
+                Flight::redirect("creation?error=" . urlencode($message));
+                exit;
+            }
+            $dataImages = [
+                "id_habitation" => $lastID["last_id"],
+                "image_path" => $upload_image
+            ];
+            $insertBaseImages = $generaliserModel->insererDonnee($nomTableImages, $dataImages);
+            if ($insertBaseImages['status'] !== "success") {
+                $message = "Erreur lors de l'insertion de l'image dans la base : " . htmlspecialchars($insertBaseImages['message']);
+                Flight::redirect("creation?error=" . urlencode($message));
+                exit;
             }
         }
-    
         Flight::redirect("crud");
     }
+    
     
 
 
