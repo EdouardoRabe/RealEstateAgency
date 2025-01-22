@@ -807,15 +807,19 @@ class GeneraliserModel
     }
 
 
-    public function generateUpload($labelText, $fieldName, $required = true)
+    public function generateUpload($labelText, $fieldName, $required = true, $multipleSelection = false)
     {
         $requiredAttr = $required ? 'required' : '';
+        $multipleAttr = $multipleSelection ? 'multiple' : '';
+        
         $html = "<div class=\"form-group\">";
         $html .= "<label for=\"{$fieldName}\">" . htmlspecialchars($labelText) . "</label>";
-        $html .= "<input type=\"file\" id=\"{$fieldName}\" name=\"{$fieldName}\" class=\"form-control\" {$requiredAttr}>";
+        $html .= "<input type=\"file\" id=\"{$fieldName}\" name=\"{$fieldName}" . ($multipleSelection ? "[]" : "") . "\" class=\"form-control\" {$requiredAttr} {$multipleAttr}>";
         $html .= "</div>";
+        
         return $html;
     }
+    
 
 
 
