@@ -507,8 +507,9 @@ class GeneraliserModel
             }
         }
         $result = Flight::bdd()->exec($sql);
-        return $result;
+        return ['status'=>'success'];
     }
+    
     
 
     public function deleteData($table, $conditions = [])
@@ -808,7 +809,15 @@ class GeneraliserModel
     }
 
 
-    
+    public function generateUpload($labelText, $fieldName, $required = true)
+    {
+        $requiredAttr = $required ? 'required' : '';
+        $html = "<div class=\"form-group\">";
+        $html .= "<label for=\"{$fieldName}\">" . htmlspecialchars($labelText) . "</label>";
+        $html .= "<input type=\"file\" id=\"{$fieldName}\" name=\"{$fieldName}\" class=\"form-control\" {$requiredAttr}>";
+        $html .= "</div>";
+        return $html;
+    }
 
 
 
