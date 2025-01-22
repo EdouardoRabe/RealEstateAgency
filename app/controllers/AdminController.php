@@ -79,6 +79,7 @@ class AdminController {
         $quartier = $_POST['quartier'];
         $desc = $_POST['description'];
         $files = $_FILES['file'];
+        $type=$_POST['id_habitation_type'];
         $nomTableImages = "agence_habitation_images";
         $deleteImage = $generaliserModel->deleteData($nomTableImages, ["id_habitation" => $id_habitation]);
         if ($deleteImage['success'] === false) {
@@ -86,12 +87,16 @@ class AdminController {
         }
         $nomTableHabitations = "agence_habitations";
         $dataHabitations = [
-            "type" => $_POST['id_habitation_type'],
             "nb_chambres" => $nb_chambres,
             "loyer" => $loyer,
             "quartier" => $quartier,
             "description" => $desc
         ];
+        
+        if (!empty($type)) { 
+            $dataHabitations["type"] = $type;
+        }
+        
         $updateTable = $generaliserModel->updateTableData($nomTableHabitations, $dataHabitations, ["id_habitation" => $id_habitation]);
         if ($updateTable['status'] !== "success") {
             die("Erreur lors de l'insertion de l'habitation : " . $updateTable['message']);
