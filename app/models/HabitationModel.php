@@ -163,7 +163,7 @@ class HabitationModel
 
             while (count($images) < 5) {
                 $html .= '<div class="image-item">
-                            <img src="assets/img/' . htmlspecialchars($defaultImagePath) . '" alt="Habitation Image" class="image-small">
+                            <img src="' . htmlspecialchars($defaultImagePath) . '" alt="Teste" class="image-small">
                         </div>';
                 $images[] = $defaultImagePath; 
             }
