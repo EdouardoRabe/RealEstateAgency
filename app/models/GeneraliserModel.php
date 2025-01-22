@@ -14,7 +14,7 @@ class GeneraliserModel
         $this->bdd = $bdd;
     }
 
-    public function generateTableau($liste, $titre = "Tableau Dynamique", $colonneMiseEnEvidence = null, $omitColumns = [], $crud = false, $redirectUpdate = null, $redirectDelete = null)
+    public function generateTableau($liste, $titre = "Tableau Dynamique", $colonneMiseEnEvidence = null, $omitColumns = [], $crud = false, $redirectUpdate = null, $redirectDelete = null, $redirectCreate=null)
     {
         if (empty($liste)) {
             return "<div class='order'><p>Aucune donnée disponible pour " . htmlspecialchars(ucfirst($titre)) . ".</p></div>";
@@ -30,8 +30,10 @@ class GeneraliserModel
         <div class='order'>
             <div class='head'>
                 <h3>$titre</h3>
-                <i class='fas fa-search'></i>
-                <i class='fas fa-filter'></i>
+                <a href='".htmlspecialchars($redirectCreate)."' class='btn btn-primary'>
+                    <i class='fas fa-plus-circle'></i> 
+                </a>
+
             </div>
             <table>
                 <thead>
