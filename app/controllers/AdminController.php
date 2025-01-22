@@ -56,7 +56,7 @@ class AdminController {
     {
         $generaliserModel = Flight::generaliserModel();
         $id = $_GET['id'];
-        $upload = $generaliserModel-> generateUpload("Choisir un image", "file");
+        $upload = $generaliserModel-> generateUpload("Choisir un image", "file",false,true);
         $select = $generaliserModel->generateSelectField("agence_habitation_type", "id_habitation_type", "name", null);
         $input = $generaliserModel->generateInputFieldsWithDefaults("agence_habitations", ["id_habitation","isDeleted","type"],[],["id_habitation"=>$id], [], true);
     
@@ -79,38 +79,52 @@ class AdminController {
         $quartier = $_POST['quartier'];
         $desc = $_POST['description'];
         $files = $_FILES['file'];
-        $erreur = $uploadModel->checkError($files);
-        if ($erreur != 0) {
-            Flight::redirect("update?id=".$id_habitation);
-        } else {
-            $upload_image = $uploadModel->uploadImg($files); 
-            $nomTableHabitations = "agence_habitations";
-            $dataHabitations = [
-                "type" => $_POST['id_habitation_type'],
-                "nb_chambres" => $nb_chambres,
-                "loyer" => $loyer,
-                "quartier" => $quartier,
-                "description" => $desc
+        $nomTableImages = "agence_habitation_images";
+        $deleteImage = $generaliserModel->deleteData($nomTableImages, ["id_habitation" => $id_habitation]);
+        if ($deleteImage['success'] === false) {
+            die("Erreur lors de la suppression des anciennes images : " . $deleteImage['message']);
+        }
+        $nomTableHabitations = "agence_habitations";
+        $dataHabitations = [
+            "type" => $_POST['id_habitation_type'],
+            "nb_chambres" => $nb_chambres,
+            "loyer" => $loyer,
+            "quartier" => $quartier,
+            "description" => $desc
+        ];
+        $updateTable = $generaliserModel->updateTableData($nomTableHabitations, $dataHabitations, ["id_habitation" => $id_habitation]);
+        if ($updateTable['status'] !== "success") {
+            die("Erreur lors de l'insertion de l'habitation : " . $updateTable['message']);
+        }
+        foreach ($files['name'] as $key => $fileName) {
+            $file = [
+                'name' => $files['name'][$key],
+                'type' => $files['type'][$key],
+                'tmp_name' => $files['tmp_name'][$key],
+                'error' => $files['error'][$key],
+                'size' => $files['size'][$key]
             ];
-            $updateTable = $generaliserModel->updateTableData($nomTableHabitations, $dataHabitations, $conditions = ["id_habitation"=>$id_habitation]);
-            if ($updateTable['status'] === "success") {
-                $nomTableImages = "agence_habitation_images";
+            $erreur = $uploadModel->checkError($file);
+    
+            if ($erreur != 0) {
+                Flight::redirect("update?id=" . $id_habitation);
+            } else {
+                $upload_image = $uploadModel->uploadImg($file);
                 $dataImages = [
                     "id_habitation" => $id_habitation,
                     "image_path" => $upload_image
                 ];
-                $deleteImage=$generaliserModel-> deleteData($nomTableImages, ["id_habitation"=>$id_habitation]);
-                $insertBaseImages = $generaliserModel-> insererDonnee($nomTableImages, $dataImages);
-                if ($insertBaseImages['status'] === "success") {
-                    Flight::redirect("crud");
-                } else {
+                $insertBaseImages = $generaliserModel->insererDonnee($nomTableImages, $dataImages);
+    
+                if ($insertBaseImages['status'] !== "success") {
                     die("Erreur lors de l'insertion de l'image : " . $insertBaseImages['message']);
                 }
-            } else {
-                die("Erreur lors de l'insertion de l'habitation : " . $updateTable['message']);
             }
         }
+    
+        Flight::redirect("crud");
     }
+    
 
 
 }
