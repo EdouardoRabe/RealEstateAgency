@@ -99,7 +99,8 @@ class AdminController {
                     "id_habitation" => $id_habitation,
                     "image_path" => $upload_image
                 ];
-                $insertBaseImages = $generaliserModel->updateTableData($nomTableImages, $dataImages, ["id_habitation"=>$id_habitation]);
+                $deleteImage=$generaliserModel-> deleteData($nomTableImages, ["id_habitation"=>$id_habitation]);
+                $insertBaseImages = $generaliserModel-> insererDonnee($nomTableImages, $dataImages);
                 if ($insertBaseImages['status'] === "success") {
                     Flight::redirect("crud");
                 } else {
