@@ -108,25 +108,25 @@ VALUES
 -- Insérer des images pour chaque habitation (au moins 5 images par habitation)
 INSERT INTO agence_habitation_images (id_habitation, image_path)
 VALUES
-(1, 'house1_image1.jpg'), (1, 'house1_image2.jpg'), (1, 'house1_image3.jpg'), (1, 'house1_image4.jpg'), (1, 'house1_image5.jpg'),
-(2, 'studio1_image1.jpg'), (2, 'studio1_image2.jpg'), (2, 'studio1_image3.jpg'), (2, 'studio1_image4.jpg'), (2, 'studio1_image5.jpg'),
-(3, 'apartment1_image1.jpg'), (3, 'apartment1_image2.jpg'), (3, 'apartment1_image3.jpg'), (3, 'apartment1_image4.jpg'), (3, 'apartment1_image5.jpg'),
-(4, 'house2_image1.jpg'), (4, 'house2_image2.jpg'), (4, 'house2_image3.jpg'), (4, 'house2_image4.jpg'), (4, 'house2_image5.jpg'),
-(5, 'cottage1_image1.jpg'), (5, 'cottage1_image2.jpg'), (5, 'cottage1_image3.jpg'), (5, 'cottage1_image4.jpg'), (5, 'cottage1_image5.jpg'),
-(6, 'house3_image1.jpg'), (6, 'house3_image2.jpg'), (6, 'house3_image3.jpg'), (6, 'house3_image4.jpg'), (6, 'house3_image5.jpg'),
-(7, 'villa1_image1.jpg'), (7, 'villa1_image2.jpg'), (7, 'villa1_image3.jpg'), (7, 'villa1_image4.jpg'), (7, 'villa1_image5.jpg'),
-(8, 'studio2_image1.jpg'), (8, 'studio2_image2.jpg'), (8, 'studio2_image3.jpg'), (8, 'studio2_image4.jpg'), (8, 'studio2_image5.jpg'),
-(9, 'apartment2_image1.jpg'), (9, 'apartment2_image2.jpg'), (9, 'apartment2_image3.jpg'), (9, 'apartment2_image4.jpg'), (9, 'apartment2_image5.jpg'),
-(10, 'cottage2_image1.jpg'), (10, 'cottage2_image2.jpg'), (10, 'cottage2_image3.jpg'), (10, 'cottage2_image4.jpg'), (10, 'cottage2_image5.jpg'),
-(11, 'house4_image1.jpg'), (11, 'house4_image2.jpg'), (11, 'house4_image3.jpg'), (11, 'house4_image4.jpg'), (11, 'house4_image5.jpg'),
-(12, 'apartment3_image1.jpg'), (12, 'apartment3_image2.jpg'), (12, 'apartment3_image3.jpg'), (12, 'apartment3_image4.jpg'), (12, 'apartment3_image5.jpg'),
-(13, 'villa2_image1.jpg'), (13, 'villa2_image2.jpg'), (13, 'villa2_image3.jpg'), (13, 'villa2_image4.jpg'), (13, 'villa2_image5.jpg'),
-(14, 'cottage3_image1.jpg'), (14, 'cottage3_image2.jpg'), (14, 'cottage3_image3.jpg'), (14, 'cottage3_image4.jpg'), (14, 'cottage3_image5.jpg'),
-(15, 'apartment4_image1.jpg'), (15, 'apartment4_image2.jpg'), (15, 'apartment4_image3.jpg'), (15, 'apartment4_image4.jpg'), (15, 'apartment4_image5.jpg'),
-(16, 'house5_image1.jpg'), (16, 'house5_image2.jpg'), (16, 'house5_image3.jpg'), (16, 'house5_image4.jpg'), (16, 'house5_image5.jpg'),
-(17, 'apartment5_image1.jpg'), (17, 'apartment5_image2.jpg'), (17, 'apartment5_image3.jpg'), (17, 'apartment5_image4.jpg'), (17, 'apartment5_image5.jpg'),
-(18, 'villa3_image1.jpg'), (18, 'villa3_image2.jpg'), (18, 'villa3_image3.jpg'), (18, 'villa3_image4.jpg'), (18, 'villa3_image5.jpg'),
-(19, 'cottage4_image1.jpg'), (19, 'cottage4_image2.jpg'), (19, 'cottage4_image3.jpg'), (19, 'cottage4_image4.jpg'), (19, 'cottage4_image5.jpg');
+(1, 'house1_image1.jpeg'), (1, 'house1_image2.jpeg'), (1, 'house1_image3.jpeg'), (1, 'house1_image4.jpeg'), (1, 'house1_image5.jpeg'),
+(2, 'studio1_image1.jpeg'), (2, 'studio1_image2.jpeg'), (2, 'studio1_image3.jpeg'), (2, 'studio1_image4.jpeg'), (2, 'studio1_image5.jpeg'),
+(3, 'appartment1_image1.jpeg'), (3, 'appartment1_image2.jpeg'), (3, 'appartment1_image3.jpeg'), (3, 'appartment1_image4.jpeg'), (3, 'appartment1_image5.jpeg'),
+(4, 'house2_image1.jpeg'), (4, 'house2_image2.jpeg'), (4, 'house2_image3.jpeg'), (4, 'house2_image4.jpeg'), (4, 'house2_image5.jpeg'),
+(5, 'cottage1_image1.jpeg'), (5, 'cottage1_image2.jpeg'), (5, 'cottage1_image3.jpeg'), (5, 'cottage1_image4.jpeg'), (5, 'cottage1_image5.jpeg'),
+(6, 'house3_image1.jpeg'), (6, 'house3_image2.jpeg'), (6, 'house3_image3.jpeg'), (6, 'house3_image4.jpeg'), (6, 'house3_image5.jpeg'),
+(7, 'villa1_image1.jpeg'), (7, 'villa1_image2.jpeg'), (7, 'villa1_image3.jpeg'), (7, 'villa1_image4.jpeg'), (7, 'villa1_image5.jpeg'),
+(8, 'studio2_image1.jpeg'), (8, 'studio2_image2.jpeg'), (8, 'studio2_image3.jpeg'), (8, 'studio2_image4.jpeg'), (8, 'studio2_image5.jpeg'),
+(9, 'appartment2_image1.jpeg'), (9, 'appartment2_image2.jpeg'), (9, 'appartment2_image3.jpeg'), (9, 'appartment2_image4.jpeg'), (9, 'appartment2_image5.jpeg'),
+(10, 'cottage2_image1.jpeg'), (10, 'cottage2_image2.jpeg'), (10, 'cottage2_image3.jpeg'), (10, 'cottage2_image4.jpeg'), (10, 'cottage2_image5.jpeg'),
+(11, 'house4_image1.jpeg'), (11, 'house4_image2.jpeg'), (11, 'house4_image3.jpeg'), (11, 'house4_image4.jpeg'), (11, 'house4_image5.jpeg'),
+(12, 'appartment3_image1.jpeg'), (12, 'appartment3_image2.jpeg'), (12, 'appartment3_image3.jpeg'), (12, 'appartment3_image4.jpeg'), (12, 'appartment3_image5.jpeg'),
+(13, 'villa2_image1.jpeg'), (13, 'villa2_image2.jpeg'), (13, 'villa2_image3.jpeg'), (13, 'villa2_image4.jpeg'), (13, 'villa2_image5.jpeg'),
+(14, 'cottage3_image1.jpeg'), (14, 'cottage3_image2.jpeg'), (14, 'cottage3_image3.jpeg'), (14, 'cottage3_image4.jpeg'), (14, 'cottage3_image5.jpeg'),
+(15, 'appartment4_image1.jpeg'), (15, 'appartment4_image2.jpeg'), (15, 'appartment4_image3.jpeg'), (15, 'appartment4_image4.jpeg'), (15, 'appartment4_image5.jpeg'),
+(16, 'house5_image1.jpeg'), (16, 'house5_image2.jpeg'), (16, 'house5_image3.jpeg'), (16, 'house5_image4.jpeg'), (16, 'house5_image5.jpeg'),
+(17, 'appartment5_image1.jpeg'), (17, 'appartment5_image2.jpeg'), (17, 'appartment5_image3.jpeg'), (17, 'appartment5_image4.jpeg'), (17, 'appartment5_image5.jpeg'),
+(18, 'villa3_image1.jpeg'), (18, 'villa3_image2.jpeg'), (18, 'villa3_image3.jpeg'), (18, 'villa3_image4.jpeg'), (18, 'villa3_image5.jpeg'),
+(19, 'cottage4_image1.jpeg'), (19, 'cottage4_image2.jpeg'), (19, 'cottage4_image3.jpeg'), (19, 'cottage4_image4.jpeg'), (19, 'cottage4_image5.jpeg'); 
 
 
 -- Ajouter une colonne isDeleted à la table agence_habitations

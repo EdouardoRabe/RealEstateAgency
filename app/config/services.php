@@ -7,6 +7,7 @@ use flight\database\PdoWrapper;
 use flight\debug\database\PdoQueryCapture;
 use Tracy\Debugger;
 use app\models\ReservationModel;
+use app\models\UploadModel;
 
 /** 
  * @var array $config This comes from the returned array at the bottom of the config.php file
@@ -43,4 +44,8 @@ Flight::map('habitationModel', function () {
 
 Flight::map('reservationModel', function () {
     return new ReservationModel(Flight::bdd());
+});
+
+Flight::map('uploadModel', function () {
+    return new UploadModel(Flight::bdd());
 });
