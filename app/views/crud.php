@@ -8,6 +8,8 @@
     <title>CRUD</title>
 </head>
 <body>
+<a href="create">create</a>
+
     <?= $table?>
 </body>
 </html>

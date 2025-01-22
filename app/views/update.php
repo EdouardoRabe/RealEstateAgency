@@ -10,12 +10,21 @@
 <body>
     <nav class="navbar">
         <h1>UPDATE</h1>
-        <form action="upload?id=<?= $id ?>" method="post" enctype="multipart/form-data">
-            <?= $upload ?>
-            <?= $select ?>
-            <?= $input ?>
-            <input type="submit" value="Valid">
-        </form>
+        <?php if(isset($id)) { ?>
+            <form action="upload?id=<?= $id ?>" method="post" enctype="multipart/form-data">
+                <?= $upload ?>
+                <?= $select ?>
+                <?= $input ?>
+                <input type="submit" value="Valid">
+            </form>
+        <?php } else {?>
+            <form action="creation" method="post" enctype="multipart/form-data">
+                <?= $upload ?>
+                <?= $select ?>
+                <?= $input ?>
+                <input type="submit" value="Valid">
+            </form>
+        <?php } ?>
     </nav>
 </body>
 </html>
