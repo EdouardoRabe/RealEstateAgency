@@ -1,0 +1,129 @@
+/* Style général du formulaire */
+form {
+    max-width: 800px;
+    width: 100%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Style des groupes de form */
+.form-group {
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+/* Style des labels */
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.95rem;
+}
+
+/* Style des inputs standards */
+.form-control {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #f9fafb;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    background-color: #ffffff;
+}
+
+/* Style spécifique pour le select */
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%234b5563' viewBox='0 0 16 16'%3E%3Cpath d='M8 10.5l-4-4h8l-4 4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+}
+
+/* Style pour l'input file */
+input[type="file"].form-control {
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+input[type="file"].form-control::file-selector-button {
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+    border-radius: 6px;
+    border: none;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+input[type="file"].form-control::file-selector-button:hover {
+    background: #1d4ed8;
+}
+
+/* Style du textarea */
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+    max-width: 100%;
+}
+
+/* Style du bouton submit */
+input[type="submit"] {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.875rem 1.5rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+input[type="submit"]:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+input[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* Style pour les champs requis */
+.form-control[required] {
+    border-left: 3px solid #2563eb;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+    form {
+        margin: 1rem;
+        padding: 1rem;
+        width: calc(100% - 2rem);
+    }
+    
+    .form-control,
+    input[type="submit"] {
+        width: 100%;
+    }
+}

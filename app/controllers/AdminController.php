@@ -37,7 +37,7 @@ class AdminController {
         $habitationModel= Flight:: habitationModel();
         $generaliserModel=Flight:: generaliserModel();
         $habitations= $habitationModel-> getListHabitations(null,null,null,null,null,null);
-        $table= $generaliserModel-> generateTableau($habitations, $titre = "Liste des habitations", null, $omitColumns = ["id_habitation", "isDeleted"], $crud = true, "update", "delete");
+        $table= $generaliserModel-> generateTableau($habitations, $titre = "Liste des habitations", null, $omitColumns = ["id_habitation", "isDeleted"], $crud = true, "update", "delete","create");
         $data=[
             "table"=>$table
         ];
