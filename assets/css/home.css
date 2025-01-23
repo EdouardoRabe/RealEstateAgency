@@ -130,14 +130,14 @@
   .card {
     background: white;
     border-radius: var(--border-radius);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     padding: 1.5rem;
   }
   
   .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
   
   /* Style du bouton de recherche */
@@ -368,6 +368,25 @@
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+}
+
+.site-footer {
+  background-color: #f8f9fa;
+  padding: 15px 0;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+  color: #6c757d;
+  font-size: 0.9em;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
 }
 
 /* Les media queries et autres styles restent identiques */
