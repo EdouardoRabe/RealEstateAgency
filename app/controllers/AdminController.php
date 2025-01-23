@@ -102,21 +102,15 @@ class AdminController {
             "quartier" => $quartier,
             "description" => $desc
         ];
-    
         if (!empty($type)) {
             $dataHabitations["type"] = $type;
         }
-    
-        // Mise à jour des données de l'habitation
         $updateTable = $generaliserModel->updateTableData($nomTableHabitations, $dataHabitations, ["id_habitation" => $id_habitation]);
         if ($updateTable['status'] !== "success") {
             Flight::redirect("update?id=$id_habitation&error=" . urlencode("Erreur lors de la mise à jour de l'habitation : " . $updateTable['message']));
             return;
         }
-    
         $isFirstImageInserted = false;
-    
-        // Parcourir les fichiers pour l'upload
         foreach ($files['name'] as $key => $fileName) {
             $file = [
                 'name' => $files['name'][$key],

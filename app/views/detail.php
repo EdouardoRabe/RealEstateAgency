@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/detail.css">
-    <link rel="stylesheet" href="assets/css/home.css">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/fontawesome.css">
     <title>Document</title>
 </head>
-<div class="container">
-        <!-- Les images à gauche -->
+<body>
+    <nav class="navbar">
+        <h2>Detail</h2>
+    </nav>
+    <div class="container">
         <?= $images ?>
-
-        <!-- Le formulaire à droite -->
         <div class="form-container">
-            <h1>An habitation located at <?= $habitation["quartier"]?></h1>
-            <p style="text-align: center;"><?= $habitation["description"]?></p>
-            <?php if ($message!="" && $status!=""): ?>
+            <h1>An habitation located at <?= $habitation["quartier"] ?></h1>
+            <p style="text-align: center;"><?= $habitation["description"] ?></p>
+            <?php if ($message != "" && $status != ""): ?>
                 <div class="message-box <?= $status ?>">
                     <?= $message ?>
                 </div>
@@ -25,4 +26,5 @@
             <?= $form ?>
         </div>
     </div>
+</body>
 </html>
