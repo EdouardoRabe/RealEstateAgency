@@ -9,7 +9,7 @@ class UploadModel{
 
      function checkError($photo)
     {
-        $tailleMax = 5000000;
+        $tailleMax = 5000000000;
         $taille = $photo['size'];
         if ($taille > $tailleMax) {
             return 1;
