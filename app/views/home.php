@@ -26,5 +26,11 @@
         </div>
     </div>
 
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 | ETU003285 Edouardo, ETU003276 Mickaella</p>
+        </div>
+    </footer>
+
 </body>
 </html>

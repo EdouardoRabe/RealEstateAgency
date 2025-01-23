@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Habitations</title>
     <link rel="stylesheet" href="assets/css/detail.css">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/fontawesome.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/fontawesome-free-6.6.0-web/css/all.min.css">
+   
 </head>
 <body>
+
     <nav class="navbar">
-        <h2>Detail</h2>
+        <h1>DETAILS</h1>
     </nav>
+
+    
     <div class="container">
         <?= $images ?>
         <div class="form-container">
@@ -26,5 +30,13 @@
             <?= $form ?>
         </div>
     </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 | ETU003285 Edouardo, ETU003276 Mickaella</p>
+        </div>
+    </footer>
+
 </body>
 </html>
+
