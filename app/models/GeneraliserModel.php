@@ -13,70 +13,6 @@ class GeneraliserModel
     {
         $this->bdd = $bdd;
     }
-
-    public function generateTableau($liste, $titre = "Tableau Dynamique", $colonneMiseEnEvidence = null, $omitColumns = [], $crud = false, $idColumn ='id',$redirectUpdate = null, $redirectDelete = null, $redirectCreate=null)
-    {
-        if (empty($liste)) {
-            return "<div class='order'><p>Aucune donnée disponible pour " . htmlspecialchars(ucfirst($titre)) . ".</p></div>";
-        }
-        $entetes = array_filter(array_keys($liste[0]), function ($key) use ($omitColumns) {
-            return is_string($key) && !in_array($key, $omitColumns) && stripos($key, 'id') !== 0;
-        });
-        if ($crud) {
-            $entetes[] = 'Modifier';
-            $entetes[] = 'Supprimer';
-        }
-        $html = "
-        <div class='order'>
-            <div class='head'>
-                <h3>$titre</h3>
-                <a href='".htmlspecialchars($redirectCreate)."' class='btn btn-primary'>
-                    <i class='fas fa-plus-circle'></i> 
-                </a>
-
-            </div>
-            <table>
-                <thead>
-                    <tr>";
-        foreach ($entetes as $entete) {
-            $html .= "<th>" . htmlspecialchars(ucfirst($entete)) . "</th>";
-        }
-        $html .= "
-                    </tr>
-                </thead>
-                <tbody>";
-
-        foreach ($liste as $item) {
-            $html .= "<tr>";
-            foreach ($entetes as $entete) {
-                if ($entete === 'Modifier') {
-                    $updateUrl = $redirectUpdate ? htmlspecialchars($redirectUpdate . "?id=" . $item[$idColumn]) : "#";
-                    $html .= "<td><a href='{$updateUrl}' class='crud-icon'><i class='fas fa-edit' style='color:#0c81ee;'></i></a></td>";
-                } else if ($entete === 'Supprimer') {
-                    $deleteUrl = $redirectDelete ? htmlspecialchars($redirectDelete . "?id=" . $item[$idColumn]) : "#";
-                    $html .= "<td><a href='{$deleteUrl}' class='crud-icon'><i class='fas fa-trash-alt' style='color:#ff3d3d;'></i></a></td>";
-                } else {
-                    $classe = ($entete === $colonneMiseEnEvidence) ? 'status completed' : '';
-                    if ($entete == "images") {
-                        $html .= "<td><span class='{$classe}'><img src='assets/img/" . $item[$entete][0] . "'></span></td>";
-                    } else {
-                        $html .= "<td><span class='{$classe}'>" . $item[$entete] . "</span></td>";
-                    }
-                }
-            }
-            $html .= "</tr>";
-        }
-        $html .= "
-                </tbody>
-            </table>
-        </div>";
-        return $html;
-    }
-
-
-
-  
-
   
 
 
@@ -481,6 +417,155 @@ class GeneraliserModel
                 'message' => "Erreur lors de la mise à jour : " . $e->getMessage()
             ];
         }
+    }
+
+    public function generateTableau($liste, $titre = "Tableau Dynamique", $colonneMiseEnEvidence = null, $omitColumns = [], $crud = false, $idColumn ='id',$redirectUpdate = null, $redirectDelete = null, $redirectCreate=null)
+    {
+        if (empty($liste)) {
+            return "<div class='order'><p>Aucune donnée disponible pour " . htmlspecialchars(ucfirst($titre)) . ".</p></div>";
+        }
+        $confirmationScript = <<<HTML
+        <style>
+            .confirmation-dialog {
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 2rem;
+                border-radius: 8px;
+                box-shadow: 0 0 20px rgba(0,0,0,0.2);
+                z-index: 1000;
+                text-align: center;
+            }
+            
+            .dialog-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+            }
+
+            .dialog-buttons {
+                margin-top: 1.5rem;
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+            }
+
+            .confirm-btn {
+                padding: 0.5rem 1.5rem;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: opacity 0.3s;
+            }
+
+            .confirm-btn.delete {
+                background: #ff3d3d;
+                color: white;
+            }
+
+            .confirm-btn.cancel {
+                background: #f0f0f0;
+                color: #333;
+            }
+        </style>
+
+        <div class="dialog-overlay" id="dialogOverlay"></div>
+        <div class="confirmation-dialog" id="confirmationDialog">
+            <h3>Confirmer la suppression</h3>
+            <p>Êtes-vous sûr de vouloir supprimer cet élément ?</p>
+            <div class="dialog-buttons">
+                <button class="confirm-btn cancel" id="cancelDelete">Annuler</button>
+                <button class="confirm-btn delete" id="confirmDelete">Supprimer</button>
+            </div>
+        </div>
+        <script>
+            let currentDeleteUrl = '';
+
+            function confirmDelete(event, url) {
+                event.preventDefault();
+                currentDeleteUrl = url;
+                document.getElementById('dialogOverlay').style.display = 'block';
+                document.getElementById('confirmationDialog').style.display = 'block';
+            }
+
+            document.getElementById('cancelDelete').addEventListener('click', () => {
+                document.getElementById('dialogOverlay').style.display = 'none';
+                document.getElementById('confirmationDialog').style.display = 'none';
+            });
+            document.getElementById('confirmDelete').addEventListener('click', () => {
+                window.location.href = currentDeleteUrl;
+            });
+            document.getElementById('dialogOverlay').addEventListener('click', () => {
+                document.getElementById('dialogOverlay').style.display = 'none';
+                document.getElementById('confirmationDialog').style.display = 'none';
+            });
+        </script>
+    HTML;
+        $entetes = array_filter(array_keys($liste[0]), function ($key) use ($omitColumns) {
+            return is_string($key) && !in_array($key, $omitColumns) && stripos($key, 'id') !== 0;
+        });
+        if ($crud) {
+            $entetes[] = 'Modifier';
+            $entetes[] = 'Supprimer';
+        }
+
+        $html = "
+        <div class='order'>
+            <div class='head'>
+                <h3>$titre</h3>
+                <a href='".htmlspecialchars($redirectCreate)."' class='btn btn-primary'>
+                    <i class='fas fa-plus-circle'></i> 
+                </a>
+            </div>
+            <table>
+                <thead>
+                    <tr>";
+
+        foreach ($entetes as $entete) {
+            $html .= "<th>" . htmlspecialchars(ucfirst($entete)) . "</th>";
+        }
+
+        $html .= "
+                    </tr>
+                </thead>
+                <tbody>";
+
+        foreach ($liste as $item) {
+            $html .= "<tr>";
+            foreach ($entetes as $entete) {
+                if ($entete === 'Modifier') {
+                    $updateUrl = $redirectUpdate ? htmlspecialchars($redirectUpdate . "?id=" . $item[$idColumn]) : "#";
+                    $html .= "<td><a href='{$updateUrl}' class='crud-icon'><i class='fas fa-edit' style='color:#0c81ee;'></i></a></td>";
+                } else if ($entete === 'Supprimer') {
+                    $deleteUrl = $redirectDelete ? htmlspecialchars($redirectDelete . "?id=" . $item[$idColumn]) : "#";
+                    $html .= "<td><a href='{$deleteUrl}' class='crud-icon' onclick='confirmDelete(event, \"{$deleteUrl}\")'><i class='fas fa-trash-alt' style='color:#ff3d3d;'></i></a></td>";
+                } else {
+                    $classe = ($entete === $colonneMiseEnEvidence) ? 'status completed' : '';
+                    if ($entete == "images") {
+                        $html .= "<td><span class='{$classe}'><img src='assets/img/" . $item[$entete][0] . "'></span></td>";
+                    } else {
+                        $html .= "<td><span class='{$classe}'>" . $item[$entete] . "</span></td>";
+                    }
+                }
+            }
+            $html .= "</tr>";
+        }
+
+        $html .= "
+                </tbody>
+            </table>
+        </div>
+        {$confirmationScript}";
+
+        return $html;
     }
 
     function updateTableData($tableName, $data, $conditions = []) {
