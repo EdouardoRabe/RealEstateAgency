@@ -14,7 +14,7 @@ class GeneraliserModel
         $this->bdd = $bdd;
     }
 
-    public function generateTableau($liste, $titre = "Tableau Dynamique", $colonneMiseEnEvidence = null, $omitColumns = [], $crud = false, $redirectUpdate = null, $redirectDelete = null, $redirectCreate=null)
+    public function generateTableau($liste, $titre = "Tableau Dynamique", $colonneMiseEnEvidence = null, $omitColumns = [], $crud = false, $idColumn ='id',$redirectUpdate = null, $redirectDelete = null, $redirectCreate=null)
     {
         if (empty($liste)) {
             return "<div class='order'><p>Aucune donnée disponible pour " . htmlspecialchars(ucfirst($titre)) . ".</p></div>";
@@ -50,10 +50,10 @@ class GeneraliserModel
             $html .= "<tr>";
             foreach ($entetes as $entete) {
                 if ($entete === 'Modifier') {
-                    $updateUrl = $redirectUpdate ? htmlspecialchars($redirectUpdate . "?id=" . $item['id_habitation']) : "#";
+                    $updateUrl = $redirectUpdate ? htmlspecialchars($redirectUpdate . "?id=" . $item[$idColumn]) : "#";
                     $html .= "<td><a href='{$updateUrl}' class='crud-icon'><i class='fas fa-edit' style='color:#0c81ee;'></i></a></td>";
                 } else if ($entete === 'Supprimer') {
-                    $deleteUrl = $redirectDelete ? htmlspecialchars($redirectDelete . "?id=" . $item['id_habitation']) : "#";
+                    $deleteUrl = $redirectDelete ? htmlspecialchars($redirectDelete . "?id=" . $item[$idColumn]) : "#";
                     $html .= "<td><a href='{$deleteUrl}' class='crud-icon'><i class='fas fa-trash-alt' style='color:#ff3d3d;'></i></a></td>";
                 } else {
                     $classe = ($entete === $colonneMiseEnEvidence) ? 'status completed' : '';
